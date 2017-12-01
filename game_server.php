@@ -1,10 +1,23 @@
 <?php
 
+$Tcol = 7;
+$Trow = 6;
+$grid;
+
+function newGame() {
+  $GLOBALS['grid'] = prepareField();
+  printGrid();
+}
+
+// function currentPlayer() {
+
+// }
+
 function prepareField() {
 	$gameField = array();
-	for($i = 0; $i < 6; $i++) {
+	for($i = 0; $i < $GLOBALS['Trow']; $i++) {
 		$gameField[$i] = array();
-		for($j = 0; $j < 7; $j++) {
+		for($j = 0; $j < $GLOBALS['Tcol']; $j++) {
 			$gameField[$i][$j] = -1;	
 		}	
 	}
@@ -12,23 +25,22 @@ function prepareField() {
 }
 
 function printGrid() {
-	global $grid;
-	for($i = 0; $i<6; $i++) {
-			for($j = 0; $j < 7; $j++) {
-				echo " ".$grid[$i][$j];
+	for($i = 0; $i<$GLOBALS['Trow']; $i++) {
+			for($j = 0; $j < $GLOBALS['Tcol']; $j++) {
+				echo " ".$GLOBALS['grid'][$i][$j];
 			}	
 			echo "<br/>";
 	}
 }
 
 function dropPiece($player, $target_col) {
-	global $grid;
 	for($i = 5; $i >= 0; $i--) {
-		if($grid[$i][$target_col] === -1) {
-			$grid[$i][$target_col] = $player;
-
+		if($GLOBALS['grid'][$i][$target_col] === -1) {
+			$GLOBALS['grid'][$i][$target_col]= $player;
+      echo "<br/><br/>".$GLOBALS['grid'][$i][$target_col]."<br/><br/>";
 			if(checkForVictory($i,$target_col)) {
 				echo "</br>Victory!</br>";
+        //echo currentPlayer()." won!";
 				return "victory";			
 			} else {
 				return "continue";
@@ -53,8 +65,6 @@ function checkForVictory($row,$col) {
 }
 
 function getAdj($row,$col,$row_inc,$col_inc) {
-	global $grid;
-
   if(cellVal($row,$col) == cellVal($row+$row_inc,$col+$col_inc)) {
     return 1+getAdj($row+$row_inc,$col+$col_inc,$row_inc,$col_inc);
   } else {
@@ -63,34 +73,26 @@ function getAdj($row,$col,$row_inc,$col_inc) {
 }
 
 function cellVal($row,$col) {
-	global $grid;
-
   if($row < 0 || $row > 5 || $col < 0 || $col > 6) {
     return -1;
   } else {
-    return $grid[$row][$col];
+    return $GLOBALS['grid'][$row][$col];
   }
 }
 
-//$data = {
-//	player: 1,
-//	selectCol: 7,
-//}
-
-$grid = prepareField();
+//$grid = prepareField();
 //printGrid();
-
+newGame();
 echo "--------------<br/>";
-//dropPiece(1, 6);
-//dropPiece(1, 5);
-//dropPiece(2, 4);
-//dropPiece(1, 3);
-//dropPiece(2, 4);
-//dropPiece(2, 4);
-//dropPiece(2, 4);
 
-//printGrid();
-
+// dropPiece(1, 6);
+// dropPiece(1, 5);
+// dropPiece(2, 4);
+// dropPiece(1, 3);
+// dropPiece(1, 3);
+// dropPiece(2, 4);
+// dropPiece(2, 4);
+// dropPiece(2, 4);
 
 $host = 'localhost';
 $port = '10000';
