@@ -1,35 +1,36 @@
 <?php
+
 function prepareField() {
 	$gameField = array();
 	for($i = 0; $i < 6; $i++) {
 		$gameField[$i] = array();
-		for($j = 0; $j < 7; $j++){
+		for($j = 0; $j < 7; $j++) {
 			$gameField[$i][$j] = -1;	
 		}	
 	}
 	return $gameField;
 }
+
 function printGrid() {
 	global $grid;
 	for($i = 0; $i<6; $i++) {
-			for($j = 0; $j < 7; $j++){
+			for($j = 0; $j < 7; $j++) {
 				echo " ".$grid[$i][$j];
 			}	
 			echo "<br/>";
 	}
 }
 
-function dropPiece($player, $target_col){
+function dropPiece($player, $target_col) {
 	global $grid;
-	for($i = 5; $i >= 0; $i--){
-		if($grid[$i][$target_col] === -1){
+	for($i = 5; $i >= 0; $i--) {
+		if($grid[$i][$target_col] === -1) {
 			$grid[$i][$target_col] = $player;
 
-			if(checkForVictory($i,$target_col)){
+			if(checkForVictory($i,$target_col)) {
 				echo "</br>Victory!</br>";
 				return "victory";			
-			}
-			else{
+			} else {
 				return "continue";
 			}
 			break;
@@ -37,41 +38,38 @@ function dropPiece($player, $target_col){
 	}
 } 
 
-function checkForVictory($row,$col){
-    if(getAdj($row,$col,0,1)+getAdj($row,$col,0,-1) > 2){ //horizontal
+function checkForVictory($row,$col) {
+  if(getAdj($row,$col,0,1)+getAdj($row,$col,0,-1) > 2){ //horizontal
 		return true;
-    }
-	else if(getAdj($row,$col,1,0) > 2){ //vertical
-        return true;
-    }
-	else if(getAdj($row,$col,-1,1)+getAdj($row,$col,1,-1) > 2){ //diagonal "\"
-        return true;
-    }
-	else if(getAdj($row,$col,1,1)+getAdj($row,$col,-1,-1) > 2){ //diagonal "/"
-        return true;
-    } 
-	else {
-        return false;
-    }
+  } else if(getAdj($row,$col,1,0) > 2){ //vertical
+    return true;
+  } else if(getAdj($row,$col,-1,1)+getAdj($row,$col,1,-1) > 2){ //diagonal "\"
+    return true;
+  } else if(getAdj($row,$col,1,1)+getAdj($row,$col,-1,-1) > 2){ //diagonal "/"
+    return true;
+  } else {
+    return false;
+  }
 }
 
-function getAdj($row,$col,$row_inc,$col_inc){
+function getAdj($row,$col,$row_inc,$col_inc) {
 	global $grid;
 
-    if(cellVal($row,$col) == cellVal($row+$row_inc,$col+$col_inc)){
-      return 1+getAdj($row+$row_inc,$col+$col_inc,$row_inc,$col_inc);
-    } else {
-      return 0;
-    }
- }
-function cellVal($row,$col){
+  if(cellVal($row,$col) == cellVal($row+$row_inc,$col+$col_inc)) {
+    return 1+getAdj($row+$row_inc,$col+$col_inc,$row_inc,$col_inc);
+  } else {
+    return 0;
+  }
+}
+
+function cellVal($row,$col) {
 	global $grid;
 
-    if($row < 0 || $row > 5 || $col < 0 || $col > 6){
-      return -1;
-    } else {
-      return $grid[$row][$col];
-    }
+  if($row < 0 || $row > 5 || $col < 0 || $col > 6) {
+    return -1;
+  } else {
+    return $grid[$row][$col];
+  }
 }
 
 //$data = {
@@ -107,7 +105,7 @@ $clients = array($socket);
 
 while (true) {
   $changed = $clients;
-  socket_select($changed, $null, $null, 0, 10);//returns the socket resources in $changed array
+  socket_select($changed, $null, $null, 0, 10); //returns the socket resources in $changed array
   
   //check for new socket
   if (in_array($socket, $changed)) {
@@ -137,7 +135,7 @@ while (true) {
       $player_num = $player_data->player_num;
       $player_col = $player_data->player_col;
 		
-		$game_status = dropPiece($player_num, $player_col);		
+		  $game_status = dropPiece($player_num, $player_col);		
 		
       //prepare data to be sent to client
       $response_text = mask(json_encode(array('type'=>'msg','player_num'=>$player_num, 'player_col'=>$player_col, 'game_status'=>$game_status)));
@@ -160,11 +158,9 @@ while (true) {
 }
 // close the listening socket
 socket_close($socket);
-function send_message($msg)
-{
+function send_message($msg) {
   global $clients;
-  foreach($clients as $changed_socket)
-  {
+  foreach($clients as $changed_socket) {
     @socket_write($changed_socket,$msg,strlen($msg));
   }
   return true;
@@ -175,12 +171,10 @@ function unmask($text) {
   if($length == 126) {
     $masks = substr($text, 4, 4);
     $data = substr($text, 8);
-  }
-  elseif($length == 127) {
+  } elseif($length == 127) {
     $masks = substr($text, 10, 4);
     $data = substr($text, 14);
-  }
-  else {
+  } else {
     $masks = substr($text, 2, 4);
     $data = substr($text, 6);
   }
@@ -191,32 +185,30 @@ function unmask($text) {
   return $text;
 }
 //Encode message for transfer to client.
-function mask($text)
-{
+function mask($text) {
   $b1 = 0x80 | (0x1 & 0x0f);
   $length = strlen($text);
   
-  if($length <= 125)
+  if($length <= 125) {
     $header = pack('CC', $b1, $length);
-  elseif($length > 125 && $length < 65536)
+  } elseif($length > 125 && $length < 65536) {
     $header = pack('CCn', $b1, 126, $length);
-  elseif($length >= 65536)
+  } elseif($length >= 65536){
     $header = pack('CCNN', $b1, 127, $length);
+  }
   return $header.$text;
 }
 //handshake new client.
-function perform_handshaking($receved_header,$client_conn, $host, $port)
-{
+function perform_handshaking($receved_header,$client_conn, $host, $port) {
   $headers = array();
   $lines = preg_split("/\r\n/", $receved_header);
-  foreach($lines as $line)
-  {
+  foreach($lines as $line) {
     $line = chop($line);
-    if(preg_match('/\A(\S+): (.*)\z/', $line, $matches))
-    {
+    if(preg_match('/\A(\S+): (.*)\z/', $line, $matches)) {
       $headers[$matches[1]] = $matches[2];
     }
   }
+
   $secKey = $headers['Sec-WebSocket-Key'];
   $secAccept = base64_encode(pack('H*', sha1($secKey . '258EAFA5-E914-47DA-95CA-C5AB0DC85B11')));
   //hand shaking header
@@ -228,4 +220,5 @@ function perform_handshaking($receved_header,$client_conn, $host, $port)
   "Sec-WebSocket-Accept:$secAccept\r\n\r\n";
   socket_write($client_conn,$upgrade,strlen($upgrade));
 }
+
 ?>
