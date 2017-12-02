@@ -7,7 +7,7 @@ $grid;
 function newGame() {
 	echo "Game started.";
 	$GLOBALS['grid'] = prepareField();
-  	printGrid();
+  //printGrid();
 }
 
 // function currentPlayer() {
