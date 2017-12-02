@@ -5,7 +5,7 @@ $Trow = 6;
 $grid;
 
 function newGame() {
-	echo "Game started.";
+	echo "Game started.".PHP_EOL;
 	$GLOBALS['grid'] = prepareField();
   //printGrid();
 }
@@ -38,7 +38,7 @@ function dropPiece($player, $target_col) {
 	for($i = 5; $i >= 0; $i--) {
 		if($GLOBALS['grid'][$i][$target_col] === -1) {
 			$GLOBALS['grid'][$i][$target_col]= $player;
-      echo "<br/><br/>".$GLOBALS['grid'][$i][$target_col]."<br/><br/>";
+      //echo "<br/><br/>".$GLOBALS['grid'][$i][$target_col]."<br/><br/>";
 			if(checkForVictory($i,$target_col)) {
 				echo "</br>Victory!</br>";
         //echo currentPlayer()." won!";
@@ -110,7 +110,7 @@ while (true) {
     	$response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' connected')));
     	send_message($response); //notify all users about new connection
 
-    	echo $ip." is now connected";
+    	echo $ip." is now connected.".PHP_EOL;
 
     	//make room for new socket
     	$found_socket = array_search($socket, $changed);
@@ -133,6 +133,7 @@ while (true) {
 	      	//prepare data to be sent to client
 	      	$response_text = mask(json_encode(array('type'=>'msg','player_num'=>$player_num, 'player_col'=>$player_col, 'game_status'=>$game_status, 'grid'=>$grid)));
 	      	send_message($response_text); //send data
+          print_r($clients);
 	      	break 2; //exist this loop
     	}
     
