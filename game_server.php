@@ -109,12 +109,14 @@ while (true) {
     	socket_getpeername($socket_new, $ip);
     	$response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' connected')));
     	send_message($response); //notify all users about new connection
-    
+
+    	echo $ip." is now connected";
+
     	//make room for new socket
     	$found_socket = array_search($socket, $changed);
     	unset($changed[$found_socket]);
   	}
-  
+
   	//loop through all connected sockets
   	foreach ($changed as $changed_socket) { 
     
@@ -129,7 +131,7 @@ while (true) {
 		  	$game_status = dropPiece($player_num, $player_col);		
 		
 	      	//prepare data to be sent to client
-	      	$response_text = mask(json_encode(array('type'=>'msg','player_num'=>$player_num, 'player_col'=>$player_col, 'game_status'=>$game_status)));
+	      	$response_text = mask(json_encode(array('type'=>'msg','player_num'=>$player_num, 'player_col'=>$player_col, 'game_status'=>$game_status, 'grid'=>$grid)));
 	      	send_message($response_text); //send data
 	      	break 2; //exist this loop
     	}
@@ -212,7 +214,7 @@ function perform_handshaking($receved_header,$client_conn, $host, $port) {
   	"WebSocket-Origin: $host\r\n" .
   	"WebSocket-Location: ws://$host:$port/demo/shout.php\r\n".
   	"Sec-WebSocket-Accept:$secAccept\r\n\r\n";
-  	
+
   	socket_write($client_conn,$upgrade,strlen($upgrade));
 }
 
