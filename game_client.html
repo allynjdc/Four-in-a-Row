@@ -48,12 +48,10 @@ $(document).ready(function(){
         var gameStatus = msg.game_status; //user name
         var systemMsg = msg.message;      
 
-        if(type == 'msg') 
-        {
-            //$('#message_box').append("<div><span class=\"user_name\">"+playerNum+"</span> : <span>move-> "+playerCol+" status->"+gameStatus+"</span></div>");
+        if(type == 'msg') {
             console.log(gameGrid);
 
-            //separate to a function//
+            //should be on a separate function//
             var table = "<table border='1'>";
             for(var i = 0; i < 6; i++){
                 var row = "<tr>";
@@ -73,14 +71,14 @@ $(document).ready(function(){
 
             $('#grid').html(table);
 
-            if(gameStatus=="victory"){   
-                alert("player "+playerNum+" wins!");
-            }
-
         }
-        if(type == 'system')
-        {
+
+        if(type == 'system') {
             $('#message_box').append("<div class=\"system_msg\">"+systemMsg+"</div>");
+        }
+
+        if(gameStatus=="victory"){   
+                alert("player "+playerNum+" wins!");
         }
         
         $('#playerCol').val(''); //reset text

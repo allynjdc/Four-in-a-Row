@@ -36,7 +36,7 @@ function addDiscToBoard(color, x_pos, y_pos) {
     board[y_pos][x_pos] = color;
     console.log(board);
 }
-function
+
 function posTaken(x_pos,y_pos){
   var value = board[y_pos][x_pos];
 
