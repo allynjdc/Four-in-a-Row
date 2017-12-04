@@ -8,32 +8,32 @@
 <script>
 $(document).ready(function(){
     //create a new WebSocket object.
-    var wsUri = "ws://10.51.1.28:10000/4inarow/server.php";   
+    var wsUri = "ws://10.55.11.213:10000/127_FinalProject/game_server.php";   
     websocket = new WebSocket(wsUri); 
     
     websocket.onopen = function(ev) { // connection is open 
         $('#message_box').append("<div class=\"system_msg\">Connected!</div>"); //notify user
     }
     $('#send-btn').click(function(){ //use clicks message send button   
-        var mymessage = $('#message').val(); //get message text
-        var myname = $('#name').val(); //get user name
+        var selectedCol = $('#playerCol').val(); //get selected column
+        var playerNum = $('#playerNum').val(); //get player number
         
-        if(myname == ""){ //empty name?
-            alert("Enter your Name please!");
+        if(playerNum == ""){ //empty player number?
+            alert("Choose a player number!");
             return;
         }
-        if(mymessage == ""){ //emtpy message?
-            alert("Enter Some message Please!");
+        if(selectedCol == ""){ //no selected column
+            alert("Please select a column!");
             return;
         }
-        document.getElementById("name").style.visibility = "hidden";
+        $('#playerNum').prop("disabled",true);
         
         var objDiv = document.getElementById("message_box");
         objDiv.scrollTop = objDiv.scrollHeight;
         //prepare json data
         var msg = {
-        player_num: myname,
-        player_col: mymessage,
+        player_num: playerNum,
+        player_col: selectedCol,
         };
         //convert and send data to server
         websocket.send(JSON.stringify(msg));
@@ -44,19 +44,44 @@ $(document).ready(function(){
         var msg = JSON.parse(ev.data); //PHP sends Json data
 		var type = msg.type;
         var playerNum = msg.player_num; //message type
-        var playerCol = msg.player_col; //message text
+        var gameGrid = msg.grid;
         var gameStatus = msg.game_status; //user name
-      
-        if(type == 'msg') 
-        {
-            $('#message_box').append("<div><span class=\"user_name\">"+playerNum+"</span> : <span>move-> "+playerCol+" status->"+gameStatus+"</span></div>");
+        var systemMsg = msg.message;      
+
+        if(type == 'msg') {
+            console.log(gameGrid);
+
+            //should be on a separate function//
+            var table = "<table border='1'>";
+            for(var i = 0; i < 6; i++){
+                var row = "<tr>";
+                for(var j = 0; j < 7; j++){
+                    var style = "";
+                    if (gameGrid[i][j] == 1){
+                        style = "style='background-color:red'";
+                    }
+                    else if(gameGrid[i][j] == 2){
+                        style = "style='background-color:blue'";
+                    }
+                    row += "<td "+style+">"+gameGrid[i][j]+"</td>";
+                }
+                table += row+"</tr>";
+            }
+            table += "</table>";
+
+            $('#grid').html(table);
+
         }
-        if(type == 'system')
-        {
-            $('#message_box').append("<div class=\"system_msg\">"+umsg+"</div>");
+
+        if(type == 'system') {
+            $('#message_box').append("<div class=\"system_msg\">"+systemMsg+"</div>");
+        }
+
+        if(gameStatus=="victory"){   
+                alert("player "+playerNum+" wins!");
         }
         
-        $('#message').val(''); //reset text
+        $('#playerCol').val(''); //reset text
         
         var objDiv = document.getElementById("message_box");
         objDiv.scrollTop = objDiv.scrollHeight;
@@ -71,12 +96,15 @@ $(document).ready(function(){
     <div class="chat_wrapper">
         <div class="message_box" id="message_box"></div>
         <div class="panel">
-            <input type="text" name="name" id="name" placeholder="Your Name" maxlength="15" />
-
-            <input type="text" name="message" id="message" placeholder="target column" maxlength="80" onkeydown = "if (event.keyCode == 13)document.getElementById('send-btn').click()"  />
-
+            <label>Player Number:
+                <input type="number" name="playerNum" id="playerNum" min="1" max="2" />
+            </label>
+            <label>Target column: 
+                <input type="number" name="playerCol" id="playerCol" min="0" max="6" onkeydown = "if (event.keyCode == 13)document.getElementById('send-btn').click()"  />
+            </label>
         </div>
         <button id="send-btn" class=button>Send</button>
+        <div class="grid" id="grid"></div>
     </div>
 </body>
 </html>
