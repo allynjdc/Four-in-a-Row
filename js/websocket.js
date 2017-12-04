@@ -46,6 +46,7 @@ $(document).ready(function(){
 
         if(gameStatus=="victory"){   
                 alert("player "+playerNum+" wins!");
+                printBoard(gameGrid);
         }
         
         $('#playerCol').val(''); //reset text
@@ -63,10 +64,12 @@ function printBoard(gameGrid) {
     // appropriate colors.
     for (var y = 0; y <= 5; y++) {
         for (var x = 0; x <= 6; x++) {
+            var cell = $("tr:eq(" + y + ")").find('td').eq(x);
             if (gameGrid[y][x] != -1) {
-                var cell = $("tr:eq(" + y + ")").find('td').eq(x);
                 var color = (gameGrid[y][x] == 1)? "yellow": "red";
                 cell.children('button').addClass(color);
+            } else {
+                cell.children('button').removeClass();
             }
         }
     }

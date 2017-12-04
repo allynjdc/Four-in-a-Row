@@ -1,25 +1,27 @@
 <?php
 
-$gameField = array();
 $Tcol = 7;
 $Trow = 6;
 $grid;
-$currentPlayer;
+$turn = 0;
 
 function newGame() {
 	echo "Game started.".PHP_EOL;
 	$GLOBALS['grid'] = prepareField();
+  $GLOBALS['turn'] = 0;
+  print_r($GLOBALS['grid']);
   //printGrid();
 }
 
 function prepareField() {
+  $gameField = array();
 	for($i = 0; $i < $GLOBALS['Trow']; $i++) {
-		$GLOBALS['gameField'][$i] = array();
+		$gameField[$i] = array();
 		for($j = 0; $j < $GLOBALS['Tcol']; $j++) {
-			$GLOBALS['gameField'][$i][$j] = -1;	
+			$gameField[$i][$j] = -1;	
 		}	
 	}
-	return $GLOBALS['gameField'];
+	return $gameField;
 }
 
 function printGrid() {
@@ -120,17 +122,25 @@ while (true) {
     	//check for any incomming data
     	while(socket_recv($changed_socket, $buf, 1024, 0) >= 1) 
     	{
-	    	$received_data = unmask($buf); //unmask data
+	    	  $received_data = unmask($buf); //unmask data
 	      	$player_data = json_decode($received_data); 
 	      	$player_num = $player_data->player_num;
 	      	$player_col = $player_data->player_col;
-		
-		  	$game_status = dropPiece($player_num, $player_col);		
-		
+		    
+        print_r($turn);
+
+        if($turn%2 == 0 && $player_num == '1'){
+          $game_status = dropPiece($player_num, $player_col);
+          $turn++;
+        } elseif($turn%2 == 1 && $player_num === '2') {
+          $game_status = dropPiece($player_num, $player_col);
+          $turn++;
+        }
+
 	      	//prepare data to be sent to client
 	      	$response_text = mask(json_encode(array('type'=>'msg','player_num'=>$player_num, 'player_col'=>$player_col, 'game_status'=>$game_status, 'grid'=>$grid)));
 	      	send_message($response_text); //send data
-          print_r($clients);
+          //print_r($clients);
 	      	break 2; //exist this loop
     	}
     
