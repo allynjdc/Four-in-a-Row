@@ -1,0 +1,66 @@
+@font-face{
+  font-family: 'Kilo';
+  src: url("../font/Pacifico.ttf"); /*from where css file is it finds the font*/
+}
+
+.desc{
+  margin-top: -10px;
+  font-size: 19px;
+}
+
+.info{text-align: center; margin-top:-25px; }
+
+h1{
+    font-family: Kilo, cursive;
+    font-weight: normal;
+    font-size: 60px;
+    color: rgb(219, 54, 54);
+    text-shadow: 7px 7px 5px #345b3d;
+    margin-bottom: 15px;
+}
+
+p, label{
+  color: white;
+  font-style: normal;
+  font-family: cursive;
+}
+
+.message_box{
+  margin-top: 20px;
+  font-size: 20px;
+  color: white;
+  background-color: rgba(0,0,0,0.2);
+  text-align: left;
+
+}
+/*Keyframes for animation at the back*/
+@keyframes snow {
+0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+ 100% {background-position: 500px 1000px, 400px 400px, 300px 300px;}
+}
+
+@-moz-keyframes snow {
+0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+100% {background-position: 500px 1000px, 400px 400px, 300px 300px;}
+}
+
+@-webkit-keyframes snow {
+0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+ 50% {background-color:  rgb(47, 66, 71);}
+ 100% {background-position: 500px 1000px, 400px 400px, 300px 300px; background-color:  rgb(47, 66, 71);}
+}
+
+@-ms-keyframes snow {
+0% {background-position: 0px 0px, 0px 0px, 0px 0px;}
+ 100% {background-position: 500px 1000px, 400px 400px, 300px 300px;}
+}
+
+body{
+  background-color: rgb(47, 66, 71);
+  background-image: url('../snow_image/snow1.png'), url('../snow_image/snow2.png'), url('../snow_image/snow3.png');
+  -webkit-animation: snow 20s linear infinite;
+	-moz-animation: snow 20s linear infinite;
+	-ms-animation: snow 20s linear infinite;
+	animation: snow 20s linear infinite;
+
+}

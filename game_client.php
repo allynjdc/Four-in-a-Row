@@ -2,27 +2,28 @@
   <head>
     <meta charset="UTF-8">
     <title>137 Connect Four</title>
-    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="css/mystyle.css">
+    <link rel="stylesheet" type="text/css" href="css/table.css">
+    <link rel="stylesheet" type="text/css" href="css/interface_design.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
     <script
 			  src="http://code.jquery.com/jquery-3.2.1.min.js"
 			  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
 			  crossorigin="anonymous"></script>
     <script src="js/websocket.js"></script>
-    <script src = "jquery.min.js"></script>
+    <script src="jquery.min.js"></script>
   </head>
   <body>
     <div class="wrapper">
-      <div class="info">
-        <h1 class="title">Four-in-a-Row</h1>
-        <p class="desc">To play four in a row, you have to take turns placing your colors to match in a row! </p>
+      <div class="info animated bounceInDown">
+        <h1 id="title">Four-in-a-Row</h1>
+        <p class="desc">To win the game, pick your player number then take turns placing your colors to match four of the same color in a row! </p>
+        <!-- Sets Who Player is Playing As-->
+        <label for="playerNum">Player Number:</label>
+        <input type="number" name="playerNum" id="playerNum" min="1" max="2" />
       </div>
-
-      <label for="playerNum">Player Number:</label>
-      <input type="number" name="playerNum" id="playerNum" min="1" max="2" />
-      
+      <!-- Table for the grid-->
       <table class="board">
         <tbody>
           <?php #loops to create a 6x7 gird
@@ -36,12 +37,10 @@
             ?>
           </tbody>
         </table>
+        <div class="message_box" id="message_box">Test</div>
       </div>
-      <div class="message_box" id="message_box"></div>
-  </body>
-
-  <footer class="wrapper">
-    <p id="gemz">Created by the Allyn, Jemwel, & Kyne in Fulfillment of CMSC 137</p>
-  </footer>
-
+    </body>
+    <div style="position: relative">
+      <p style="position: fixed; bottom: 0; width:100%; text-align: center; font-size: 14px;">Created by the Allyn, Kyne, & Jemwel in Fulfillment of CMSC 137</p>
+    </div>
 </html>

@@ -8,18 +8,15 @@
 }
 .box{
   background-color: red;
-  margin-left: 5px;
   height: 150px;
   width: 150px;
   display: inline-flex;
   border: medium solid black;
 }
-.info{
-  text-align: center;
-  margin-left: -50px;
-}
 .board {
-  background-color: #4c8fd4;
+  background-color: #3b7bbe;
+  border-radius: 10px;
+  margin-top: 60px;
 }
 
 .board button{
@@ -27,26 +24,16 @@
   width: 60px;
   border-radius: 50%;
   border: 0;
-  background-color: #4f4848;
-}
+  background-color: #484a4f;
 
-.h_col{
-  background-color: rgb(224, 216, 17);
-  height: 60px;
-  width: 60px;
-  text-align: center;
 }
 
 button.red {
-  background-color: #fb4a39;
+  background: linear-gradient(to bottom, #ff6363, #c62f2f);
   /*background: linear-gradient(to bottom, #ff1616 0%,#ad0505 100%);*/
 }
 
-button.yellow {
-  background-color: #fcf881;
+button.green {
+  background: linear-gradient(to bottom, #7bfe7d, #2bc623);
   /* background: linear-gradient(to bottom, #333 0%,#000000 100%);*/
-}
-
-body{
-  background-color: rgb(230, 230, 230);
 }

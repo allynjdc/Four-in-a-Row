@@ -1,22 +1,22 @@
 $(document).ready(function(){
     //create a new WebSocket object.
-    var wsUri = "ws://192.168.8.101:10000/137_FinalProject/Four-in-a-Row/game_server.php";   
-    websocket = new WebSocket(wsUri); 
-    
-    websocket.onopen = function(ev) { // connection is open 
+    var wsUri = "ws://192.168.8.101:10000/137_FinalProject/Four-in-a-Row/game_server.php";
+    websocket = new WebSocket(wsUri);
+
+    websocket.onopen = function(ev) { // connection is open
         $('#message_box').append("<div class=\"system_msg\">Connected!</div>"); //notify user
     }
-    $('.board button').click(function(e) { 
+    $('.board button').click(function(e) {
         var selectedCol = $(this).closest('tr').find('td').index($(this).closest('td'));
         var playerNum = $('#playerNum').val(); //get player number
-        
+
         if(playerNum == ""){
             alert("Choose a player number!");
             return;
         }
-     
+
         $('#playerNum').prop("disabled",true);
-        
+
         //prepare json data
         var msg = {
             player_num: playerNum,
@@ -25,15 +25,15 @@ $(document).ready(function(){
         //convert and send data to server
         websocket.send(JSON.stringify(msg));
     });
-    
+
     //#### Message received from server?
     websocket.onmessage = function(ev) {
         var msg = JSON.parse(ev.data); //PHP sends Json data
-		var type = msg.type;
-        var playerNum = msg.player_num; 
+		    var type = msg.type;
+        var playerNum = msg.player_num;
         var gameGrid = msg.grid;
         var gameStatus = msg.game_status;
-        var systemMsg = msg.message;      
+        var systemMsg = msg.message;
 
         if(type == 'msg') {
             console.log(gameGrid);
@@ -44,19 +44,19 @@ $(document).ready(function(){
             $('#message_box').append("<div class=\"system_msg\">"+systemMsg+"</div>");
         }
 
-        if(gameStatus=="victory"){   
-                alert("player "+playerNum+" wins!");
+        if(gameStatus=="victory"){
+                alert("player "+ playerNum +" wins!");
                 printBoard(gameGrid);
         }
-        
+
         $('#playerCol').val(''); //reset text
-        
+
         var objDiv = document.getElementById("message_box");
         objDiv.scrollTop = objDiv.scrollHeight;
     };
-    
-    websocket.onerror   = function(ev){$('#message_box').append("<div class=\"system_error\">Error Occurred - "+ev.data+"</div>");}; 
-    websocket.onclose   = function(ev){$('#message_box').append("<div class=\"system_msg\">Connection Closed</div>");}; 
+
+    websocket.onerror   = function(ev){$('#message_box').append("<div class=\"system_error\">Error Occurred - "+ev.data+"</div>");};
+    websocket.onclose   = function(ev){$('#message_box').append("<div class=\"system_msg\">Connection Closed</div>");};
 });
 
 function printBoard(gameGrid) {
@@ -66,7 +66,7 @@ function printBoard(gameGrid) {
         for (var x = 0; x <= 6; x++) {
             var cell = $("tr:eq(" + y + ")").find('td').eq(x);
             if (gameGrid[y][x] != -1) {
-                var color = (gameGrid[y][x] == 1)? "yellow": "red";
+                var color = (gameGrid[y][x] == 1)? "green": "red";
                 cell.children('button').addClass(color);
             } else {
                 cell.children('button').removeClass();

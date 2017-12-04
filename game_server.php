@@ -13,22 +13,22 @@ function newGame() {
   //printGrid();
 }
 
-function prepareField() {
+function prepareField() { // Creates a 6x7 Grid
   $gameField = array();
 	for($i = 0; $i < $GLOBALS['Trow']; $i++) {
 		$gameField[$i] = array();
 		for($j = 0; $j < $GLOBALS['Tcol']; $j++) {
-			$gameField[$i][$j] = -1;	
-		}	
+			$gameField[$i][$j] = -1;
+		}
 	}
 	return $gameField;
 }
 
-function printGrid() {
+function printGrid() {// for checking
 	for($i = 0; $i<$GLOBALS['Trow']; $i++) {
 			for($j = 0; $j < $GLOBALS['Tcol']; $j++) {
 				echo " ".$GLOBALS['grid'][$i][$j];
-			}	
+			}
 			echo "<br/>";
 	}
 }
@@ -41,14 +41,14 @@ function dropPiece($player, $target_col) {
 			if(checkForVictory($i,$target_col)) {
         echo "Player ".$player." won!";
         newGame();
-				return "victory";			
+				return "victory";
 			} else {
 				return "continue";
 			}
 			break;
 		}
 	}
-} 
+}
 
 function checkForVictory($row,$col) {
   	if(getAdj($row,$col,0,1)+getAdj($row,$col,0,-1) > 2){ //horizontal
@@ -96,15 +96,15 @@ $clients = array($socket);
 while (true) {
   	$changed = $clients;
   	socket_select($changed, $null, $null, 0, 10); //returns the socket resources in $changed array
-  
+
   	//check for new socket
   	if (in_array($socket, $changed)) {
     	$socket_new = socket_accept($socket);
     	$clients[] = $socket_new;
-    
+
    		$header = socket_read($socket_new, 1024);
     	perform_handshaking($header, $socket_new, $host, $port);
-    
+
     	socket_getpeername($socket_new, $ip);
     	$response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' connected')));
     	send_message($response); //notify all users about new connection
@@ -117,16 +117,16 @@ while (true) {
   	}
 
   	//loop through all connected sockets
-  	foreach ($changed as $changed_socket) { 
-    
+  	foreach ($changed as $changed_socket) {
+
     	//check for any incomming data
-    	while(socket_recv($changed_socket, $buf, 1024, 0) >= 1) 
+    	while(socket_recv($changed_socket, $buf, 1024, 0) >= 1)
     	{
 	    	  $received_data = unmask($buf); //unmask data
-	      	$player_data = json_decode($received_data); 
+	      	$player_data = json_decode($received_data);
 	      	$player_num = $player_data->player_num;
 	      	$player_col = $player_data->player_col;
-		    
+
         print_r($turn);
 
         if($turn%2 == 0 && $player_num == '1'){
@@ -143,18 +143,18 @@ while (true) {
           //print_r($clients);
 	      	break 2; //exist this loop
     	}
-    
+
    	 	$buf = @socket_read($changed_socket, 1024, PHP_NORMAL_READ);
     	if ($buf === false) { // check disconnected client
       		// remove client for $clients array
      	 	$found_socket = array_search($changed_socket, $clients);
       		socket_getpeername($changed_socket, $ip);
       		unset($clients[$found_socket]);
-      
+
       		//notify all users about disconnected connection
       		$response = mask(json_encode(array('type'=>'system', 'message'=>$ip.' disconnected')));
       		send_message($response);
-   	 	}	
+   	 	}
   	}
 }
 // close the listening socket
@@ -191,7 +191,7 @@ function unmask($text) {
 function mask($text) {
   	$b1 = 0x80 | (0x1 & 0x0f);
   	$length = strlen($text);
-  
+
   	if($length <= 125) {
     	$header = pack('CC', $b1, $length);
   	} elseif($length > 125 && $length < 65536) {

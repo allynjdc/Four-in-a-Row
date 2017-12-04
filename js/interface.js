@@ -6,7 +6,7 @@ var board = [[0,0,0,0,0,0,0],
              [0,0,0,0,0,0,0],
              [0,0,0,0,0,0,0]];
 
-var currentPlayer = "yellow";
+var currentPlayer = "green";
 //Setup Game.
 $(document).ready(function() {
 
@@ -16,35 +16,36 @@ $(document).ready(function() {
 
     y_pos = dropDown(x_pos, y_pos);
 
-    console.log(y_pos);
-    console.log(x_pos);
-
     if (posTaken(x_pos, y_pos)){
-      alert("Cant place there");
+      $('.board').addClass('animated shake');
+      $('.board').one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(){
+        $('.board').removeClass('animated shake');
+          alert("You cant place your color there");
+      });
       return;
     }
 
     addDiscToBoard(currentPlayer, x_pos, y_pos);
-    printBoard();
+    printBoard();//prints of board
 
-
-    changePlayer();
+    changePlayer();//change players
   });
 
 });
+
 function addDiscToBoard(color, x_pos, y_pos) {
     board[y_pos][x_pos] = color;
-    console.log(board);
+    //board with current position will contain that color
 }
 
 function posTaken(x_pos,y_pos){
   var value = board[y_pos][x_pos];
 
   if (value == 0){
-    console.log("Nope");
+  //returns value that the board is not taken
     return false;
   } else{
-    console.log("Yes");
+  //returns value that the board is taken
     return true;
   }
 }
