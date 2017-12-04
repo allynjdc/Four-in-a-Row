@@ -82,7 +82,7 @@ function cellVal($row,$col) {
 
 newGame();
 
-$host = '192.168.8.101';
+$host = 'localhost';
 $port = '10000';
 $null = NULL;
 
