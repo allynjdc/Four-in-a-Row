@@ -80,7 +80,7 @@ function cellVal($row,$col) {
 
 newGame();
 
-$host = 'localhost';
+$host = '192.168.8.101';
 $port = '10000';
 $null = NULL;
 

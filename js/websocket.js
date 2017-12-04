@@ -1,6 +1,6 @@
 $(document).ready(function(){
     //create a new WebSocket object.
-    var wsUri = "ws://10.55.11.213:10000/127_FinalProject/game_server.php";   
+    var wsUri = "ws://192.168.8.101:10000/137_FinalProject/Four-in-a-Row/game_server.php";   
     websocket = new WebSocket(wsUri); 
     
     websocket.onopen = function(ev) { // connection is open 
