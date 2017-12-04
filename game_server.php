@@ -1,27 +1,24 @@
 <?php
 
+$gameField = array();
 $Tcol = 7;
 $Trow = 6;
 $grid;
+$currentPlayer;
 
 function newGame() {
   $GLOBALS['grid'] = prepareField();
   printGrid();
 }
 
-// function currentPlayer() {
-
-// }
-
 function prepareField() {
-	$gameField = array();
 	for($i = 0; $i < $GLOBALS['Trow']; $i++) {
-		$gameField[$i] = array();
+		$GLOBALS['gameField'][$i] = array();
 		for($j = 0; $j < $GLOBALS['Tcol']; $j++) {
-			$gameField[$i][$j] = -1;	
+			$GLOBALS['gameField'][$i][$j] = -1;	
 		}	
 	}
-	return $gameField;
+	return $GLOBALS['gameField'];
 }
 
 function printGrid() {
@@ -39,8 +36,8 @@ function dropPiece($player, $target_col) {
 			$GLOBALS['grid'][$i][$target_col]= $player;
       echo "<br/><br/>".$GLOBALS['grid'][$i][$target_col]."<br/><br/>";
 			if(checkForVictory($i,$target_col)) {
-				echo "</br>Victory!</br>";
-        //echo currentPlayer()." won!";
+        echo "Player ".$player." won!";
+        newGame();
 				return "victory";			
 			} else {
 				return "continue";
